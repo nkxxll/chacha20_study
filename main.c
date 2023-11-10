@@ -5,11 +5,7 @@
 #include <string.h>
 #include <sys/types.h>
 
-void quad_round(uint32_t *state, int a, int b, int c, int d);
-void add_state(size_t size, uint32_t dest_state[size],
-               uint32_t src_state[size]);
-void serialize(uint32_t *state);
-void get_state(uint32_t state[16]);
+#include "chacha20.h"
 
 int main(int argc, char *argv[]) {
   /*
@@ -49,36 +45,11 @@ int main(int argc, char *argv[]) {
   add_state(16, state, init_state);
   serialize(state);
 
-  return EXIT_SUCCESS;
-}
-
-void get_state(uint32_t state[16]) {
-  // get the state to the chacha function in one way or another
-  // TODO: add the test state here
-}
-
-void quad_round(uint32_t *state, int a, int b, int c, int d) {
-  // 1.  a += b; d ^= a; d <<<= 16;
-  // 2.  c += d; b ^= c; b <<<= 12;
-  // 3.  a += b; d ^= a; d <<<= 8;
-  // 4.  c += d; b ^= c; b <<<= 7;
-  state[a] += state[b];
-  state[d] ^= state[a];
-  state[d] = (state[d] << 16) | (state[d] >> (32 - 16));
-  state[c] += state[d];
-  state[b] ^= state[c];
-  state[b] = (state[b] << 12) | (state[b] >> (32 - 12));
-  state[a] += state[b];
-  state[d] ^= state[a];
-  state[d] = (state[d] << 8) | (state[d] >> (32 - 8));
-  state[c] += state[d];
-  state[b] ^= state[c];
-  state[b] = (state[b] << 7) | (state[b] >> (32 - 7));
-}
-
-void add_state(size_t size, uint32_t dest_state[size],
-               uint32_t src_state[size]) {
-  for (int i = 0; i < size; i++) {
-    dest_state[i] += src_state[i];
+  for (int i = 0; i < 16; i++) {
+    printf("%x ", state[i]);
+    if (i % 4 == 0)
+      printf("\n");
   }
+
+  return EXIT_SUCCESS;
 }
