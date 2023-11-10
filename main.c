@@ -1,3 +1,4 @@
+#include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -5,8 +6,10 @@
 #include <sys/types.h>
 
 void quad_round(uint32_t *state, int a, int b, int c, int d);
-void add_state(uint32_t *dest_state, uint32_t *src_state);
+void add_state(size_t size, uint32_t dest_state[size],
+               uint32_t src_state[size]);
 void serialize(uint32_t *state);
+void get_state(uint32_t state[16]);
 
 int main(int argc, char *argv[]) {
   /*
@@ -25,17 +28,9 @@ int main(int argc, char *argv[]) {
   // read in 16 32 bit unsigned hex strings and convert to uint_32
   uint32_t state[16];
   char buf[128];
-  fgets(buf, 128, stdin);
-  for (int i = 0; i < 16; i++) {
-    int start_idx = i * 8;
-    int end_idx = (i + 1) * 8;
-    char hex_str[8];
-    // so was in der art oder so
-    strncpy(hex_str, buf + i * 8, 8);
-    state[i] = strtoul(hex_str, NULL, 16);
-  }
-  uint32_t init_state[16];
+  get_state(state);
 
+  uint32_t init_state[16];
   // save the init state for later
   memcpy(init_state, state, 16 * sizeof(uint32_t));
 
@@ -50,10 +45,16 @@ int main(int argc, char *argv[]) {
     quad_round(state, 3, 4, 9, 14);
   }
 
-  add_state(state, init_state);
+  // you don't realy need the size because the state is always 16 uint32_t long
+  add_state(16, state, init_state);
   serialize(state);
 
   return EXIT_SUCCESS;
+}
+
+void get_state(uint32_t state[16]) {
+  // get the state to the chacha function in one way or another
+  // TODO: add the test state here
 }
 
 void quad_round(uint32_t *state, int a, int b, int c, int d) {
@@ -73,4 +74,11 @@ void quad_round(uint32_t *state, int a, int b, int c, int d) {
   state[c] += state[d];
   state[b] ^= state[c];
   state[b] = (state[b] << 7) | (state[b] >> (32 - 7));
+}
+
+void add_state(size_t size, uint32_t dest_state[size],
+               uint32_t src_state[size]) {
+  for (int i = 0; i < size; i++) {
+    dest_state[i] += src_state[i];
+  }
 }
