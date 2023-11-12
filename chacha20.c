@@ -34,6 +34,18 @@ void quad_round(uint32_t *state, int a, int b, int c, int d) {
   state[b] = (state[b] << 7) | (state[b] >> (32 - 7));
 }
 
+/* This function performs a full (horizontal & diagonal) chacha20 round */
+void full_round(uint32_t state[16]) {
+    quad_round(state, 0, 4, 8, 12);
+    quad_round(state, 1, 5, 9, 13);
+    quad_round(state, 2, 6, 10, 14);
+    quad_round(state, 3, 7, 11, 15);
+    quad_round(state, 0, 5, 10, 15);
+    quad_round(state, 1, 6, 11, 12);
+    quad_round(state, 2, 7, 8, 13);
+    quad_round(state, 3, 4, 9, 14);
+}
+
 void add_state(size_t size, uint32_t dest_state[size],
                uint32_t src_state[size]) {
   for (int i = 0; i < size; i++) {

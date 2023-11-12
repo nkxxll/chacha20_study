@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+void full_round(uint32_t state[16]);
 void quad_round(uint32_t *state, int a, int b, int c, int d);
 void add_state(size_t size, uint32_t dest_state[size],
                uint32_t src_state[size]);
