@@ -31,9 +31,7 @@
 
 .cache
 
-
-## Local 
-build/**/*
+build/*
 
 ## Nix
 .direnv
