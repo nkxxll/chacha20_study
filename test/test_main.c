@@ -10,6 +10,14 @@ MunitTest tests[] = {{
                          NULL                    /* parameters */
                      },
                      {
+                         "/test-encryption",     /* name */
+                         test_encryption,        /* test */
+                         test_encryption_setup,  /* setup */
+                         test_tear_down,         /* tear_down */
+                         MUNIT_TEST_OPTION_NONE, /* options */
+                         NULL                    /* parameters */
+                     },
+                     {
                          "/test-add-state",      /* name */
                          test_add_state,         /* test */
                          test_add_state_setup,   /* setup */

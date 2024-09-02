@@ -11,5 +11,7 @@ void *test_add_state_setup(const MunitParameter params[], void *user_data);
 MunitResult test_add_state(const MunitParameter params[], void *fixture);
 void *test_serialize_setup(const MunitParameter params[], void *user_data);
 MunitResult test_serialize(const MunitParameter params[], void *fixture);
+void *test_encryption_setup(const MunitParameter params[], void *user_data);
+MunitResult test_encryption(const MunitParameter params[], void *fixture);
 
 #endif // !TEST_CHACHA

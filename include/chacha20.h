@@ -13,4 +13,7 @@ void serialize(uint32_t *state);
 void get_state(uint32_t state[16]);
 int big_to_little(int number);
 
+char *encrypt(uint32_t constants[4], uint32_t key[8], uint32_t counter[1],
+              uint32_t nonce[3], char *plaintext);
+
 #endif // !CHACHA20_H
